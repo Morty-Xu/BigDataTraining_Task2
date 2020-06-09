@@ -1,5 +1,4 @@
 import scrapy
-import requests
 import json
 from Task2.items import Task2Item
 
@@ -18,7 +17,6 @@ class BilibiliSpider(scrapy.Spider):
 
     # 第一步：获取页数 numPages
     def parse(self, response):
-        # print(str('numPages is ------------------------------') + str(json.loads(response.text)['numPages']))
         r = json.loads(response.text)
         numPages = r['numPages']
 
