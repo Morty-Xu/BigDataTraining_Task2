@@ -13,11 +13,8 @@ class BilibiliSpider(scrapy.Spider):
     start_urls = [
         'https://s.search.bilibili.com/cate/search?callback=jqueryCallback_bili_32548301302379645'
         '&main_ver=v3&search_type=video&view_type=hot_rank&order=click'
-        '&copy_right=-1&cate_id=22&pagesize=20&time_from=20200606&time_to=20200606'
+        '&copy_right=-1&cate_id=22&pagesize=20&time_from=20200501&time_to=20200531'
     ]
-
-    # def start_requests(self):
-    #     for i in range():
 
     # 第一步：获取页数 numPages
     def parse(self, response):
@@ -28,15 +25,13 @@ class BilibiliSpider(scrapy.Spider):
         for i in range(numPages):
             url = 'https://s.search.bilibili.com/cate/search?callback=jqueryCallback_bili_32548301302379645' \
                   '&main_ver=v3&search_type=video&view_type=hot_rank&order=click' \
-                  '&copy_right=-1&cate_id=22&page={}&pagesize=20&time_from=20200606&time_to=20200606' . format(i + 1)
+                  '&copy_right=-1&cate_id=22&page={}&pagesize=20&time_from=20200501&time_to=20200531' . format(i + 1)
             yield scrapy.Request(url=url, callback=self.parse_detail)
 
 
     def parse_detail(self, response):
-        # print(response)
         result = json.loads(response.text)['result']
-        # result = ['abc']
-        # print(result)
+
         for i in range(len(result)):
             item = Task2Item()
             item['rank'] = (result[i]['rank_index']) * 20 + result[i]['rank_offset']
@@ -46,7 +41,7 @@ class BilibiliSpider(scrapy.Spider):
             item['favorites'] = result[i]['favorites']
             item['play'] = result[i]['play']
             item['rank_score'] = result[i]['rank_score']
-            item['tag'] = result[i]['tag']
+            item['tag'] = result[i]['tag'].replace(',', '&&')
             item['title'] = result[i]['title']
             item['video_review'] = result[i]['video_review']
             yield item
