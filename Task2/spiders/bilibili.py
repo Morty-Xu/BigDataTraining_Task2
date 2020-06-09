@@ -2,7 +2,7 @@ import scrapy
 import json
 from Task2.items import Task2Item
 
-
+# 爬取 b站 2020-05-01至 2020-05-31一个月以来发布的所有鬼畜视频
 class BilibiliSpider(scrapy.Spider):
     name = 'Task2'
     allowed_domains = ['s.search.bilibili.com']
